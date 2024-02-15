@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.javaReact.javaReactBackend.entity.Role.ADMIN;
+import static com.javaReact.javaReactBackend.entity.Role.USER;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -20,13 +21,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
-            "/api/v1/items",
-            "/api/v1/auth/authenticate",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/swagger-ui/index.html",
-            "/swagger-ui.html"
+//            "/api/v1/items",
+            "/api/v1/auth/**",
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -40,11 +36,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/api/v1/auth/register").hasAnyRole(ADMIN.name())
-                                .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN.name())
-                                .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN.name())
-                                .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN.name())
-                                .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN.name())
+//                                .requestMatchers("/api/v1/auth/register").hasAnyRole(ADMIN.name())
+//                                .requestMatchers("/api/v1/items").hasAnyRole(USER.name(), ADMIN.name())
+                                .requestMatchers(GET, "/api/v1/items").hasAnyAuthority(USER.name(), ADMIN.name())
+                                .requestMatchers(POST, "/api/v1/items").hasAnyAuthority(ADMIN.name())
+                                .requestMatchers(PUT, "/api/v1/items/**").hasAuthority(ADMIN.name())
+                                .requestMatchers(DELETE, "/api/v1/items/**").hasAuthority(ADMIN.name())
                                 .anyRequest()
                                 .authenticated()
                 )
