@@ -14,12 +14,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin("*")
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/items")
+@RequestMapping("/api/v1/items")
 public class ItemController {
 
     private ItemService itemService;
+
 
     @PostMapping
     public ResponseEntity<ItemDto> createItem(@Valid @RequestBody ItemDto itemDto) {
